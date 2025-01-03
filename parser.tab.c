@@ -102,7 +102,6 @@
     #include <math.h>
     
     int tempCounter = 1;
-    char Buffer[16];
     char sign[50];
     double vars[26];
     double temps[1000];
@@ -112,17 +111,17 @@
     extern FILE *yyout;
 
  
-    int reverseInt(int n) {
+    int reverse(int number) {
         int reversed = 0;
-        while (n != 0) {
-            reversed = reversed * 10 + (n % 10);
-            n /= 10;
+        while (number != 0) {
+            reversed = reversed * 10 + (number % 10);
+            number /= 10;
         }
         return reversed;
     }
 
    
-    double maybeReverse(double value) {
+    double needReverese(double value) {
         
         int sign = (value < 0) ? -1 : 1;
         double absVal = fabs(value);
@@ -131,10 +130,9 @@
 
 
         if (intPart != 0 && (intPart % 10) != 0) {
-            intPart = reverseInt(intPart);
+            intPart = reverse(intPart);
         }
         
-      
         return sign * (intPart);
     }
 
@@ -177,14 +175,14 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 65 "parser.y"
+#line 63 "parser.y"
 {
     char id[500];
     char num[500];
     char nonTerminal[500];
 }
 /* Line 193 of yacc.c.  */
-#line 188 "parser.tab.c"
+#line 186 "parser.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -197,7 +195,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 201 "parser.tab.c"
+#line 199 "parser.tab.c"
 
 #ifdef short
 # undef short
@@ -484,8 +482,8 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    87,    87,    88,    92,    96,   104,   113,   127,   141,
-     160,   173,   178,   185,   190
+       0,    85,    85,    86,    90,    94,   102,   111,   125,   139,
+     158,   171,   176,   183,   188
 };
 #endif
 
@@ -1400,39 +1398,39 @@ yyreduce:
   switch (yyn)
     {
         case 4:
-#line 93 "parser.y"
+#line 91 "parser.y"
     {
       printf("Statement completed\n");
     ;}
     break;
 
   case 5:
-#line 97 "parser.y"
+#line 95 "parser.y"
     {
       printf("Statement completed\n");
     ;}
     break;
 
   case 6:
-#line 105 "parser.y"
+#line 103 "parser.y"
     {
        double val = getValue((yyvsp[(3) - (3)].nonTerminal));
        vars[(yyvsp[(1) - (3)].id)[0] - 'a'] = val;
-       printf("%s = %s \n",  (yyvsp[(1) - (3)].id),(yyvsp[(3) - (3)].nonTerminal));
+       printf("%s = %s \n",  (yyvsp[(1) - (3)].id), (yyvsp[(3) - (3)].nonTerminal));
        printf("%d;\n", (int)val);
     ;}
     break;
 
   case 7:
-#line 114 "parser.y"
+#line 112 "parser.y"
     {
       sprintf((yyval.nonTerminal), "t%d", tempCounter);
       double val1 = getValue((yyvsp[(1) - (3)].nonTerminal));
       double val2 = getValue((yyvsp[(3) - (3)].nonTerminal));
-      double raw  = val1 + val2;
-      double res  = maybeReverse(raw);
+      double result  = val1 + val2;
+      double finalResult  = needReverese(result);
 
-      temps[tempCounter] = res;
+      temps[tempCounter] = finalResult;
    
       printf("%s = %s + %s;\n", (yyval.nonTerminal), (yyvsp[(1) - (3)].nonTerminal), (yyvsp[(3) - (3)].nonTerminal));
       tempCounter++;
@@ -1440,15 +1438,15 @@ yyreduce:
     break;
 
   case 8:
-#line 128 "parser.y"
+#line 126 "parser.y"
     {
       sprintf((yyval.nonTerminal), "t%d", tempCounter);
       double val1 = getValue((yyvsp[(1) - (3)].nonTerminal));
       double val2 = getValue((yyvsp[(3) - (3)].nonTerminal));
-      double raw  = val1 - val2;
-      double res  = maybeReverse(raw);
+      double result  = val1 - val2;
+      double finalResult  = needReverese(result);
 
-      temps[tempCounter] = res;
+      temps[tempCounter] = finalResult;
     
       printf("%s = %s - %s;\n", (yyval.nonTerminal), (yyvsp[(1) - (3)].nonTerminal), (yyvsp[(3) - (3)].nonTerminal));
       tempCounter++;
@@ -1456,7 +1454,7 @@ yyreduce:
     break;
 
   case 9:
-#line 142 "parser.y"
+#line 140 "parser.y"
     {
       sprintf((yyval.nonTerminal), "t%d", tempCounter);
       double val1 = getValue((yyvsp[(1) - (3)].nonTerminal));
@@ -1467,62 +1465,62 @@ yyreduce:
         exit(1);
       }
 
-      double raw  = val1 / val2;
-      double res  = maybeReverse(raw);
+      double result  = val1 / val2;
+      double finalResult  = needReverese(result);
 
-      temps[tempCounter] = res;
+      temps[tempCounter] = finalResult;
       printf("%s = %s / %s;\n", (yyval.nonTerminal), (yyvsp[(1) - (3)].nonTerminal), (yyvsp[(3) - (3)].nonTerminal));
       tempCounter++;
     ;}
     break;
 
   case 10:
-#line 161 "parser.y"
+#line 159 "parser.y"
     {
       sprintf((yyval.nonTerminal), "t%d", tempCounter);
       double val1 = getValue((yyvsp[(1) - (3)].nonTerminal));
       double val2 = getValue((yyvsp[(3) - (3)].nonTerminal));
-      double raw  = val1 * val2;
-      double res  = maybeReverse(raw);
+      double result  = val1 * val2;
+      double finalResult  = needReverese(result);
 
-      temps[tempCounter] = res;
+      temps[tempCounter] = finalResult;
       printf("%s = %s * %s;\n", (yyval.nonTerminal), (yyvsp[(1) - (3)].nonTerminal), (yyvsp[(3) - (3)].nonTerminal));
       tempCounter++;
     ;}
     break;
 
   case 11:
-#line 174 "parser.y"
+#line 172 "parser.y"
     {
       strcpy((yyval.nonTerminal), (yyvsp[(2) - (3)].nonTerminal));
     ;}
     break;
 
   case 12:
-#line 179 "parser.y"
+#line 177 "parser.y"
     {
-      double raw = atof((yyvsp[(1) - (1)].num));
-      double val = maybeReverse(raw);
-      sprintf((yyval.nonTerminal), "%g", val);
+      double result = atof((yyvsp[(1) - (1)].num));
+      double number = needReverese(result);
+      sprintf((yyval.nonTerminal), "%g", number);
     ;}
     break;
 
   case 13:
-#line 186 "parser.y"
+#line 184 "parser.y"
     {
       strcpy((yyval.nonTerminal), (yyvsp[(1) - (1)].id));
     ;}
     break;
 
   case 14:
-#line 191 "parser.y"
+#line 189 "parser.y"
     {
       sprintf((yyval.nonTerminal), "t%d", tempCounter);
       double val2 = getValue((yyvsp[(2) - (2)].nonTerminal));
-      double raw  = -val2;
-      double res  = maybeReverse(raw);
+      double result  = -val2;
+      double finalResult  = needReverese(result);
 
-      temps[tempCounter] = res;
+      temps[tempCounter] = finalResult;
       printf("%s = -%s;\n", (yyval.nonTerminal), (yyvsp[(2) - (2)].nonTerminal));
       tempCounter++;
     ;}
@@ -1530,7 +1528,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 1534 "parser.tab.c"
+#line 1532 "parser.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1744,7 +1742,7 @@ yyreturn:
 }
 
 
-#line 203 "parser.y"
+#line 201 "parser.y"
 
 
 int main(int argc, char **argv) {

@@ -5,7 +5,6 @@
     #include <math.h>
     
     int tempCounter = 1;
-    char Buffer[16];
     char sign[50];
     double vars[26];
     double temps[1000];
@@ -15,17 +14,17 @@
     extern FILE *yyout;
 
  
-    int reverseInt(int n) {
+    int reverse(int number) {
         int reversed = 0;
-        while (n != 0) {
-            reversed = reversed * 10 + (n % 10);
-            n /= 10;
+        while (number != 0) {
+            reversed = reversed * 10 + (number % 10);
+            number /= 10;
         }
         return reversed;
     }
 
    
-    double maybeReverse(double value) {
+    double needReverese(double value) {
         
         int sign = (value < 0) ? -1 : 1;
         double absVal = fabs(value);
@@ -34,10 +33,9 @@
 
 
         if (intPart != 0 && (intPart % 10) != 0) {
-            intPart = reverseInt(intPart);
+            intPart = reverse(intPart);
         }
         
-      
         return sign * (intPart);
     }
 
@@ -105,7 +103,7 @@ assignment
     {
        double val = getValue($3);
        vars[$1[0] - 'a'] = val;
-       printf("%s = %s \n",  $1,$3);
+       printf("%s = %s \n",  $1, $3);
        printf("%d;\n", (int)val);
     }
   
@@ -115,10 +113,10 @@ expr : expr ADD expr
       sprintf($$, "t%d", tempCounter);
       double val1 = getValue($1);
       double val2 = getValue($3);
-      double raw  = val1 + val2;
-      double res  = maybeReverse(raw);
+      double result  = val1 + val2;
+      double finalResult  = needReverese(result);
 
-      temps[tempCounter] = res;
+      temps[tempCounter] = finalResult;
    
       printf("%s = %s + %s;\n", $$, $1, $3);
       tempCounter++;
@@ -129,10 +127,10 @@ expr : expr ADD expr
       sprintf($$, "t%d", tempCounter);
       double val1 = getValue($1);
       double val2 = getValue($3);
-      double raw  = val1 - val2;
-      double res  = maybeReverse(raw);
+      double result  = val1 - val2;
+      double finalResult  = needReverese(result);
 
-      temps[tempCounter] = res;
+      temps[tempCounter] = finalResult;
     
       printf("%s = %s - %s;\n", $$, $1, $3);
       tempCounter++;
@@ -149,10 +147,10 @@ expr : expr ADD expr
         exit(1);
       }
 
-      double raw  = val1 / val2;
-      double res  = maybeReverse(raw);
+      double result  = val1 / val2;
+      double finalResult  = needReverese(result);
 
-      temps[tempCounter] = res;
+      temps[tempCounter] = finalResult;
       printf("%s = %s / %s;\n", $$, $1, $3);
       tempCounter++;
     }
@@ -162,10 +160,10 @@ expr : expr ADD expr
       sprintf($$, "t%d", tempCounter);
       double val1 = getValue($1);
       double val2 = getValue($3);
-      double raw  = val1 * val2;
-      double res  = maybeReverse(raw);
+      double result  = val1 * val2;
+      double finalResult  = needReverese(result);
 
-      temps[tempCounter] = res;
+      temps[tempCounter] = finalResult;
       printf("%s = %s * %s;\n", $$, $1, $3);
       tempCounter++;
     }
@@ -177,9 +175,9 @@ expr : expr ADD expr
 
   | NUM
     {
-      double raw = atof($1);
-      double val = maybeReverse(raw);
-      sprintf($$, "%g", val);
+      double result = atof($1);
+      double number = needReverese(result);
+      sprintf($$, "%g", number);
     }
   
   | ID
@@ -191,10 +189,10 @@ expr : expr ADD expr
     {
       sprintf($$, "t%d", tempCounter);
       double val2 = getValue($2);
-      double raw  = -val2;
-      double res  = maybeReverse(raw);
+      double result  = -val2;
+      double finalResult  = needReverese(result);
 
-      temps[tempCounter] = res;
+      temps[tempCounter] = finalResult;
       printf("%s = -%s;\n", $$, $2);
       tempCounter++;
     }
